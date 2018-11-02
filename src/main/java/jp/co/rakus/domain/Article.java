@@ -10,9 +10,13 @@ import java.util.List;
  */
 public class Article {
 	
+	/**　記事のID	 */
 	private Integer id;
+	/**　投稿者名	 */
 	private String name;
+	/**　投稿内容	 */
 	private String content;
+	/**　記事に対するコメント情報	 */
 	private List<Comment> commentList;
 	
 	@Override

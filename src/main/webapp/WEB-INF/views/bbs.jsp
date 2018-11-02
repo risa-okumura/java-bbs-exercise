@@ -12,7 +12,7 @@
 <h2>掲示板アプリケーション</h2>
 
 <form:form action="${pageContext.request.contextPath}/article/insertArticle" modelAttribute="articleForm">
-	<form:errors path="name" cssStyle="color:red" element="div"/>
+	<c:if test="${article.id==id}"><form:errors path="name" cssStyle="color:red" element="div"/></c:if>
 	投稿者名:<form:input path="name"/><br>
 	<form:errors path="content" cssStyle="color:red" element="div"/>
 	投稿内容:<form:input path="content"/><br>

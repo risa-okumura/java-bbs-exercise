@@ -36,7 +36,7 @@ public class ArticleRepository {
 	/**
 	 * 記事の全件検索を行う.
 	 * 
-	 * @return 記事情報
+	 * @return 記事情報一覧
 	 */
 	public List<Article> findAll(){
 		String sql = "SELECT id,name,content FROM articles ORDER BY id DESC;";

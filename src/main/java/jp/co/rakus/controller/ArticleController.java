@@ -81,7 +81,7 @@ public class ArticleController {
 		BeanUtils.copyProperties(articleForm, article);
 		articleRepository.insert(article);
 
-		return index(model);
+		return "redirect:/article/index";
 	}
 
 	/**
@@ -100,11 +100,11 @@ public class ArticleController {
 		}
 
 		Comment comment = new Comment();
-		comment.setArticleId(commentForm.getIntArticleId());
 		BeanUtils.copyProperties(commentForm, comment);
+		comment.setArticleId(commentForm.getIntArticleId());
 		commentRepository.insert(comment);
 
-		return index(model);
+		return "redirect:/article/index";
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class ArticleController {
 		commentRepository.deleteByArticleId(id);
 		articleRepository.deleteById(id);
 
-		return index(model);
+		return "redirect:/article/index";
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class ArticleController {
 	public String deleteComment(Model model, int id) {
 		
 		commentRepository.deleteByArticleId(id);
-		return index(model);
+		return "redirect:/article/index";
 
 	}
 

@@ -57,6 +57,7 @@ public class ArticleController {
 		for (Article article : articleList) {
 			List<Comment> commentList = commentRepository.findByArticleId(article.getId());
 			article.setCommentList(commentList);
+			commentList.size();
 		}
 		model.addAttribute("articleList", articleList);
 		return "/bbs";
@@ -73,6 +74,7 @@ public class ArticleController {
 	@RequestMapping("/insertArticle")
 	public String insertArticle(@Validated ArticleForm articleForm,BindingResult result, Model model) {
 		
+		System.out.println();
 		if(result.hasErrors()) {
 			return index(model);
 		}
@@ -95,6 +97,7 @@ public class ArticleController {
 	@RequestMapping("/insertComment")
 	public String insertComment(@Validated CommentForm commentForm, BindingResult result,Model model) {
 		
+		System.out.println(commentForm);
 		if(result.hasErrors()) {
 			return index(model);
 		}

@@ -39,7 +39,7 @@ public class ArticleRepository {
 	 * @return 記事情報
 	 */
 	public List<Article> findAll(){
-		String sql = "SELECT id,name,content FROM articles ORDER BY name;";
+		String sql = "SELECT id,name,content FROM articles ORDER BY id DESC;";
 		SqlParameterSource param = new MapSqlParameterSource();
 		List<Article> articleList = template.query(sql, param, ARTICLE_ROW_MAPPER);
 		
@@ -47,10 +47,29 @@ public class ArticleRepository {
 		
 	}
 	
+	/**
+	 * 記事の投稿を行う.
+	 * 
+	 * @param article 投稿用の記事情報
+	 */
 	public void insert(Article article) {
-		String sql = "INSERT INTO articles(name, content) VALUES ( name=:name, content:content ) ;";
+		String sql = "INSERT INTO articles(name, content) VALUES ( :name, :content ) ;";
 		SqlParameterSource param = new MapSqlParameterSource().addValue("name", article.getName()).addValue("content", article.getContent());
 		template.update(sql, param);
+		
+	}
+	/**
+	 * 記事の削除を行う.
+	 * 
+	 * @param id 記事ID
+	 */
+	public void deleteById(int id) {
+		String sql = "DELETE FROM articles WHERE id=:id;";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		template.update(sql, param);
+		
+
+		
 		
 	}
 	

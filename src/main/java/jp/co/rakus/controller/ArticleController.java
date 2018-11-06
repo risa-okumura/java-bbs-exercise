@@ -46,7 +46,7 @@ public class ArticleController {
 	
 
 	/**
-	 * 記事の一覧を表示する.
+	 * （初級）記事の一覧を表示する.
 	 * 
 	 * @return 記事一覧画面
 	 */
@@ -63,7 +63,7 @@ public class ArticleController {
 	}
 	
 	/**
-	 * 記事とコメントを一回のSQLで表示する.
+	 * （中級）記事とコメントを一回のSQLで表示する.
 	 * 
 	 * @param model リクエストスコープに対応
 	 * @return　記事一覧画面
@@ -92,14 +92,14 @@ public class ArticleController {
 	public String insertArticle(@Validated ArticleForm articleForm,BindingResult result, Model model) {
 		
 		if(result.hasErrors()) {
-			return index(model);
+			return index2(model);
 		}
 
 		Article article = new Article();
 		BeanUtils.copyProperties(articleForm, article);
 		articleRepository.insert(article);
 
-		return "redirect:/article/index";
+		return "redirect:/article/index2";
 	}
 	
 
@@ -114,9 +114,8 @@ public class ArticleController {
 	@RequestMapping("/insertComment")
 	public String insertComment(@Validated CommentForm commentForm, BindingResult result,Model model) {
 		
-		System.out.println(commentForm);
 		if(result.hasErrors()) {
-			return index(model);
+			return index2(model);
 		}
 
 		Comment comment = new Comment();
@@ -124,7 +123,7 @@ public class ArticleController {
 		comment.setArticleId(commentForm.getIntArticleId());
 		commentRepository.insert(comment);
 
-		return "redirect:/article/index";
+		return "redirect:/article/index2";
 	}
 
 	/**
@@ -135,12 +134,12 @@ public class ArticleController {
 	 * @return　記事一覧画面
 	 */
 	@RequestMapping("/deleteArticle")
-	public String deleteArticle(Model model, int id) {
+	public String deleteArticle(int id) {
 
 		commentRepository.deleteByArticleId(id);
 		articleRepository.deleteById(id);
 
-		return "redirect:/article/index";
+		return "redirect:/article/index2";
 	}
 
 	/**
@@ -151,11 +150,24 @@ public class ArticleController {
 	 * @return　記事一覧画面
 	 */
 	@RequestMapping("/deleteComment")
-	public String deleteComment(Model model, int id) {
+	public String deleteComment(int id) {
 		
 		commentRepository.deleteByArticleId(id);
-		return "redirect:/article/index";
+		return "redirect:/article/index2";
 
+	}
+	
+	/**
+	 * （上級）記事とコメントを一括で削除する.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/deleteAllByArticleId")
+	public String deleteAllByArticleId(int id) {
+		articleRepository.deleteAllByArticleId(id);
+		return "redirect:/article/index2";
+		
 	}
 
 }

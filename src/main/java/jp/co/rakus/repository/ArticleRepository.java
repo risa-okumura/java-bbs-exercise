@@ -32,33 +32,39 @@ public class ArticleRepository {
 
 		return article;
 	};
-
+	
+	/** ResultSetExtractorを使ってまとめてデータを取り出す方法.*/
 	private static final ResultSetExtractor<List<Article>> ARTICLE_RESULT_SET_EXTRACTOR = (rs) -> {
 		List<Article> articleList = new ArrayList<>();
 		Comment comment;
 		List<Comment> commentList = new ArrayList<>();
-		Integer lastarticleId = 0;
+		Integer lastArticleId = 0;
 		Article article = null;
 		while (rs.next()) {
 
-			if (lastarticleId != rs.getInt("id")) {
+			/** rsで取り出したarticleのIDが前回取り出したarticleのIDが異なるとき、新規にarticleを作成する.*/
+			/** IDが同じだった場合は、新たにarticleは作成せず、そのarticleが持つcommentのみを追加する.*/
+			/** commentは一行ずつ必要なので毎回インスタンス化しなければならない.*/
+			if (lastArticleId != rs.getInt("id")) {
 
 				article = new Article();
 				article.setId(rs.getInt("id"));
 				article.setName(rs.getString("name"));
 				article.setContent(rs.getString("content"));
 				articleList.add(article);
-				lastarticleId = article.getId();
+				lastArticleId = article.getId();
 
 				commentList = new ArrayList<>();
 				article.setCommentList(commentList);
 			}
+			if(rs.getInt("com_id") > 0) {
 			comment = new Comment();
 			comment.setId(rs.getInt("com_id"));
 			comment.setName(rs.getString("com_name"));
 			comment.setContent(rs.getString("com_content"));
 			comment.setArticleId(rs.getInt("article_id"));
 			commentList.add(comment);
+			}
 		}
 
 		return articleList;
@@ -82,7 +88,7 @@ public class ArticleRepository {
 	}
 
 	/**
-	 * 記事とコメント両方を一回のSQLで検索する.
+	 * （中級）記事とコメント両方を一回のSQLで検索する.
 	 * 
 	 * @return 記事及びコメント情報一覧
 	 */
@@ -121,6 +127,18 @@ public class ArticleRepository {
 		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
 		template.update(sql, param);
 
+	}
+	
+	/**
+	 * 記事、コメントを一括で削除する.
+	 * 
+	 * @param id  記事ID
+	 *            
+	 */
+	public void deleteAllByArticleId(int id) {
+		String sql = "WITH deleted AS (DELETE FROM articles WHERE id = :id RETURNING id) DELETE FROM comments WHERE article_id IN (SELECT id FROM deleted);";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("id", id);
+		template.update(sql, param);
 	}
 
 }

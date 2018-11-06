@@ -24,7 +24,7 @@
 	投稿ID：<c:out value="${article.id}" /><br>
 	投稿者名：<c:out value="${article.name}" /><br>
 	投稿内容：<c:out value="${article.content}" /><br>
-	<form action="${pageContext.request.contextPath}/article/deleteArticle" method="post">
+	<form action="${pageContext.request.contextPath}/article/deleteAllByArticleId" method="post">
 	<input type="hidden" name="id" value="${article.id}">
 	<input type="submit" value="投稿削除"><br>
 	</form>
@@ -50,7 +50,7 @@
 		
 	<hr>
 	</c:forEach>
-
+	
 
 </body>
 </html>

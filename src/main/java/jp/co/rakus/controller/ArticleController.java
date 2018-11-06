@@ -57,11 +57,28 @@ public class ArticleController {
 		for (Article article : articleList) {
 			List<Comment> commentList = commentRepository.findByArticleId(article.getId());
 			article.setCommentList(commentList);
-			commentList.size();
 		}
 		model.addAttribute("articleList", articleList);
 		return "/bbs";
 	}
+	
+	/**
+	 * 記事とコメントを一回のSQLで表示する.
+	 * 
+	 * @param model リクエストスコープに対応
+	 * @return　記事一覧画面
+	 */
+	@RequestMapping("/index2")
+	public String index2(Model model) {
+		
+
+		List<Article> articleList = articleRepository.findAll2();
+		model.addAttribute("articleList", articleList);
+		
+		
+		return "/bbs";		
+	}
+	
 
 	/**
 	 * 記事を投稿する.
@@ -74,7 +91,6 @@ public class ArticleController {
 	@RequestMapping("/insertArticle")
 	public String insertArticle(@Validated ArticleForm articleForm,BindingResult result, Model model) {
 		
-		System.out.println();
 		if(result.hasErrors()) {
 			return index(model);
 		}
@@ -85,6 +101,7 @@ public class ArticleController {
 
 		return "redirect:/article/index";
 	}
+	
 
 	/**
 	 * コメントを投稿する.

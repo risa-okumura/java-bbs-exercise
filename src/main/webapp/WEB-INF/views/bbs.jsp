@@ -29,7 +29,6 @@
 	<input type="submit" value="投稿削除"><br>
 	</form>
 		
-		<c:out value="${article.commentList.size()}"/>
 		<c:forEach var="comment" items="${article.commentList}" >
 		コメントID：<c:out value="${comment.id}" /><br>
 		コメント者名：<c:out value="${comment.name}" /><br>
